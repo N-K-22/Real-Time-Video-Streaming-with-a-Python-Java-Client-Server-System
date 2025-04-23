@@ -4,6 +4,11 @@ import asyncio
 import aiohttp
 import threading
 import socket
+
+'''questions:
+        can I assume the IP and port values
+
+'''
 #used python-socketio.readthedocs.io/en/v4/server.html to figure out whether to use coroutines and become more familiar with the library
 if __debug__: # if i want to put into debug by default, remove by compiling with -O flag
     #resoruce for this:https://www.reddit.com/r/learnpython/comments/tolt28/are_preprocessor_directives_available_in_python/
