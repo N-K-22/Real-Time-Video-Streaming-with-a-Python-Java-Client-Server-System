@@ -25,8 +25,8 @@ def UDP_transfer():
 
 SOCKET = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-#application = socketio.ASGIApp(server)
-application = server.Application()
+#application = socketio.ASGIApp(server) #not needed for implementation
+application = server.Application() #based off of this resource: https://python-socketio.readthedocs.io/en/latest/server.html#id6
 server.attach(application)
 
 @server.event
