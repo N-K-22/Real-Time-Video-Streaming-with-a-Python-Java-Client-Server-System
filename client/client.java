@@ -61,6 +61,8 @@ public class Socket_Transmission_Frames extends Client_Implementation{
     }
     public DatagramPacket packet_creation(byte[] frame){
         DatagramPacket packet = new DatagramPack(frame, frame.length, this.server_address, this.port);
+     //https://stackoverflow.com/questions/6137140/return-a-byte-array-from-a-java-method
+     // https://docs.oracle.com/javase/8/docs/api/java/net/DatagramPacket.html
         return packet;
     }
 
@@ -83,6 +85,9 @@ public class Socket_Transmission_Frames extends Client_Implementation{
             this.sock.close();
         }
     }
+}
+
+public class video_streaming implements Socket_Transmission_Frames {
 
 
 }
