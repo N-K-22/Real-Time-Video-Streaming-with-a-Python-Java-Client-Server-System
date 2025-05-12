@@ -1,4 +1,3 @@
-import java.io.IO;
 import org.opencv.*;
 import org.*;
 import org.opencv.videoio.VideoCapture;
