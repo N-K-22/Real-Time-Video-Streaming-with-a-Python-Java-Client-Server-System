@@ -1,8 +1,6 @@
 package CLIENT;
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.*;
-import java.net.InetAddress;
 import java.util.Arrays;
 
 
@@ -18,10 +16,9 @@ public class Socket_Transmission_Frames extends Client_Implementation{
             System.out.println("Server address: " + this.server_address);
             this.port = port;
             System.out.println("Server port: " + this.port);
-            this.sock = new DatagramSocket(port, server_address);
+            this.sock = new DatagramSocket();
             if (this.sock == null || this.sock.isClosed()) {
                 System.out.println("Socket is not initialized or is closed.");
-                //return false;
             }
             System.out.println("Socket connected");
 
@@ -46,10 +43,10 @@ public class Socket_Transmission_Frames extends Client_Implementation{
         try{
             //find the number of transmissions that need to occur:
             int number_of_transmissions_needed = (int)Math.ceil((double)frame.length/(double)65507); //https://stackoverflow.com/questions/3396813/message-too-long-for-udp-socket-after-setting-sendbuffersize
-            byte[] frame_bytes = new byte[65507];
+            byte[] frame_bytes;
             int min = 0;
             int max = 0;
-            for(int i = 0; i<number_of_transmissions_needed-1; i++){
+            for(int i = 0; i<number_of_transmissions_needed-1; i++){ //sending components of frames ocnsecutively due to size constraints
                 min = i*65507;
                 max = min+65507;
                 frame_bytes = Arrays.copyOfRange(frame, min, max);
@@ -61,9 +58,8 @@ public class Socket_Transmission_Frames extends Client_Implementation{
             //sending last packet
             byte[] last_frame = Arrays.copyOfRange(frame,max , frame.length);
             DatagramPacket packet = packet_creation(last_frame);
-            //System.out.println("Sending frame: " + Arrays.toString(frame_bytes));
             this.sock.send(packet);
-            //System.out.println("Transmissions sent for Full Frame");
+            //System.out.println("Transmissions sent for Full Frame"); //--> comment out for debugging
 
         }catch(Exception e){
             System.err.println("Failed to send UDP packet. " + e.getMessage());
@@ -72,13 +68,13 @@ public class Socket_Transmission_Frames extends Client_Implementation{
         }
         return true;
     }
-
-    public boolean is_connect(){
+ 
+    public boolean is_connect(){ //boolean check 
         if (this.sock != null && !sock.isClosed()) connected = true;
         return true;
     }
 
-    public void close_socket(){
+    public void close_socket(){ //used for clean shutdown
 
         try{
             if (this.sock != null  && !(this.sock.isClosed())){

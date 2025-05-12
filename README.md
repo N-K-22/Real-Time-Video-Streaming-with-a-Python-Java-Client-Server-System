@@ -1,13 +1,13 @@
 # Real-Time-Video-Streaming-with-a-Python-Java-Client-Server-System
 A real-time multimedia communication system involving cross-platform networking
 
-# Code Breakdown
+# Code Breakdown Special Considerations
 Based on experimentally examining the frame size, the maximum number of bytes for each fram is 2073600. For this reason, the code is specifically designed to handle this alrge number in a specific way. All things considered, the nuanced approach will simply regard the maximum number of bytes to send. For debugging purposes and to ensure accurate execution, this number will be assumed for verification purposes. However, the code is designed in such a way that this number is simply relative to whatever the quotient of frame lengths and 65507 is. 
 
 
-
-
 For this implementation, the assumption that no segment is lost is assumed for ease. One big thing I noticed after scouring multiple stack exchanges to see if there is some way to bchange the size and sadly there appears not to be. 
+
+Furthermore, to adhere to a constant frame streaming rate, the thread is sleeping for a constant amount once the full frame is transferred. There is consecutive arrays of bytes that contain fragmented components of the frame to send over UDP due to size constraints. 
 
 
 # How to Set Up
@@ -51,7 +51,7 @@ For the installation of socketio, use the following command:
     ![](image-5.png)
 4. Next start up the Java Client by running the main function in the Main class in IntelliJ. Before the connection is made and the acknowledgement messages are sent. The terminal should look like the following.
 
-    ![](image-6.png)
+![](image-6.png)
 5. The Java client will run to completion and return a Message Acknowledgement everytime something is communicated over SocketIO from the server. The Message Acknowledgement termianl outputs should show the JSON object with hte frame size and timestamp included.  
 
 # Verification and Evidence

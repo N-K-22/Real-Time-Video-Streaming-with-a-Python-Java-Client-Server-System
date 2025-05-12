@@ -18,6 +18,7 @@ else:
     server = socketio.AsyncServer(async_mode='aiohttp',cors_allowed_origins='*')  #initilizes the thread mode to be true
 application = web.Application() #based off of this resource: https://python-socketio.readthedocs.io/en/latest/server.html#id6
 server.attach(application)
+#lines above for server set up
 
 
 @server.event
@@ -32,29 +33,22 @@ async def disconnect(sid): #socket disconnected
 @server.on("feedback")
 async def feedback(sid,data):
     print(f"time stamp: {DATE.now()}, frame_size: {len(data)}")
-    #server.emit("feedback", {"timestamp":DATE.now(), "frame_size":len(data)}, room=sid)
-    #return "OK" , 123 #https://stackoverflow.com/questions/7872611/in-python-what-is-the-difference-between-pass-and-return
 
-'''@server.event 
-async def my_event(sid,data): 
-    print(f"time stamp: {DATE.now()}, frame_size: {len(data)}")
-    server.emit("feedback", {"timestamp":DATE.now(), "frame_size":len(data)}, room=sid)
-    #return "OK" , 123 #https://stackoverflow.com/questions/7872611/in-python-what-is-the-difference-between-pass-and-return
-'''
+
 async def UDP_transfer(): #set up for USP set up
     global server
-    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as SOCKET:
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as SOCKET: #helps with clean shutdown when starting a socket
         SOCKET.settimeout(5) #https://stackoverflow.com/questions/19570672/non-blocking-error-when-adding-timeout-to-python-server
         connection_result = SOCKET.bind((IP,PORT))
         SOCKET.setblocking(False) #https://stackoverflow.com/questions/19570672/non-blocking-error-when-adding-timeout-to-python-server 
         while True:
             try:
-                data, discard = await asyncio.get_event_loop().sock_recvfrom(SOCKET, 65507)
+                data, discard = await asyncio.get_event_loop().sock_recvfrom(SOCKET, 65507) #receivng data over socket
                 print("Data has been received over UDP")
                 await server.emit('feedback', {"timestamp":(DATE.now()).strftime("%c"), "frame_size":len(data)}) #https://www.w3schools.com/python/python_datetime.asp
+                #transmitting over SocketIO
             except Exception as e: #debugging purposes
                 print("Error Processing Packet. Error Message: " + str(e))
-                #close_UDP(SOCKET)
 def close_UDP(s): #CLOSE SOCKET
     s.close()
 

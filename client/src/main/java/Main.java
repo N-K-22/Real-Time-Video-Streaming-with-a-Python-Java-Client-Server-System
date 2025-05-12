@@ -51,7 +51,7 @@ public class Main extends Thread {
             boolean status = true;
             while(frames_sent < total){
                 try {
-                    semaphore.acquire();
+                    semaphore.acquire(); //acquire semaphore to allow for the synchronization where there is not a bombardment to the frames side for better consistent streaming rate
                     status = client.read_single_frame();
                     frame_to_send = client.get_frame();
                     client.view_frame(frame_to_send);
@@ -64,7 +64,7 @@ public class Main extends Thread {
                     }
                     System.out.println("Frame transmitted over UDP!");
                     semaphore.release();
-                    Thread.sleep(100);
+                    Thread.sleep(1000);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -89,11 +89,13 @@ public class Main extends Thread {
 
             }
         };
+        //spawning threads
         Thread thread1 = new Thread(UDP_Transmission_task);
         Thread thread2 = new Thread(task2);
-
+//starting threads
         thread1.start();
         thread2.start();
+        //threads wait for each other to finish
        try{
             thread1.join(5000);
             thread2.join(5000);
