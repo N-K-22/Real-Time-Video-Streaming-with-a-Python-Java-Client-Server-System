@@ -17,9 +17,9 @@ if __debug__: # if i want to put into debug by default, remove by compiling with
 else:
     server = socketio.AsyncServer(async_mode='aiohttp')  #initilizes the thread mode to be true
 
-async def UDP_transfer(): #set up for USP set up
+async def UDP_transfer(server): #set up for USP set up
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as SOCKET:
-        SOCKET.settimeout(5)
+        SOCKET.settimeout(5) #https://stackoverflow.com/questions/19570672/non-blocking-error-when-adding-timeout-to-python-server
         connection_result = SOCKET.bind((IP,PORT))
         SOCKET.setblocking(1) #https://stackoverflow.com/questions/19570672/non-blocking-error-when-adding-timeout-to-python-server 
         while True:
@@ -41,7 +41,7 @@ async def connect(sid,environ): #socket connected
 async def disconnect(sid): #socket disconnected
     print("Disconnected: ", sid)
 
-@server.event
+@server.on("feedback")
 async def feedback(sid,data):
     print(f"time stamp: {DATE.now()}, frame_size: {len(data)}")
     server.emit("feedback", {"timestamp":DATE.now(), "frame_size":len(data)}, room=sid)
@@ -61,7 +61,7 @@ async def init():
     application = web.Application() #based off of this resource: https://python-socketio.readthedocs.io/en/latest/server.html#id6
     server.attach(application)
     print("Creating Asyncio Task for Receiving Data Over UDP")
-    task = asyncio.create_task(UDP_transfer()) #runs in background
+    task = asyncio.create_task(UDP_transfer(server)) #runs in background
     print("Background UDP transfer set up complete")
     return application
 
