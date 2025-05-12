@@ -2,6 +2,13 @@
 A real-time multimedia communication system involving cross-platform networking
 
 # Code Breakdown
+Based on experimentally examining the frame size, the maximum number of bytes for each fram is 2073600. For this reason, the code is specifically designed to handle this alrge number in a specific way. All things considered, the nuanced approach will simply regard the maximum number of bytes to send. For debugging purposes and to ensure accurate execution, this number will be assumed for verification purposes. However, the code is designed in such a way that this number is simply relative to whatever the quotient of frame lengths and 65507 is. 
+
+
+
+
+For this implementation, the assumption that no segment is lost is assumed for ease. One big thing I noticed after scouring multiple stack exchanges to see if there is some way to bchange the size and sadly there appears not to be. 
+
 
 # How to Set Up
 In terms of set-up, there are a couple of additional steps that need to be taken to ensure compatibility with the code base primarily on the Java Client side.  Ensure you are using Python version  3.13. 
@@ -13,7 +20,9 @@ In terms of set-up, there are a couple of additional steps that need to be taken
     - threading
     - socket
     - socketio
-    For the installation of socketio, use the following command:
+
+
+For the installation of socketio, use the following command:
         pip install python-socketio
 2. Java Client set up
     To set up the Java Client, ensure that the latest version of OpenCV Java Docs is installed. 
@@ -45,14 +54,19 @@ In terms of set-up, there are a couple of additional steps that need to be taken
     ![](image-6.png)
 5. The Java client will run to completion and return a Message Acknowledgement everytime something is communicated over SocketIO from the server. The Message Acknowledgement termianl outputs should show the JSON object with hte frame size and timestamp included.  
 
-Based on experimentally examining the frame size, the maximum number of bytes for each fram is 2073600. For this reason, the code is specifically designed to handle this alrge number in a specific way. All things considered, the nuanced approach will simply regard the maximum number of bytes to send. For debugging purposes and to ensure accurate execution, this number will be assumed for verification purposes. However, the code is designed in such a way that this number is simply relative to whatever the quotient of frame lengths and 65507 is. 
+# Verification and Evidence
 
+The image below shows the 
+![Python Server Side](image-7.png)
+If there is an extended delay in a packet being received, the following image is shown.
+![Python Server Side](image-8.png)
+Upon starting of the execution, the image below is seen:
+![Java Side](image-9.png)
 
-
-
-For this implementation, the assumption that no segment is lost is assumed for ease. One big thing I noticed after scouring multiple stack exchanges to see if there is some way to bchange the size and sadly there appears not to be. 
 
 
 # Additional Resources used Throughout the Code
 - https://stackoverflow.com/questions/3396813/message-too-long-for-udp-socket-after-setting-sendbuffersize
 - https://socket.io/docs/v4/
+
+
