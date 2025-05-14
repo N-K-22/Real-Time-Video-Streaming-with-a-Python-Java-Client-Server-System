@@ -52,7 +52,7 @@ For the installation of socketio, use the following command:
 4. Next start up the Java Client by running the main function in the Main class in IntelliJ. Before the connection is made and the acknowledgement messages are sent. The terminal should look like the following.
 
 ![](image-6.png)
-5. The Java client will run to completion and return a Message Acknowledgement everytime something is communicated over SocketIO from the server. The Message Acknowledgement termianl outputs should show the JSON object with hte frame size and timestamp included.  
+5. The Java client will run to completion and return a Message Acknowledgement everytime something is communicated over SocketIO from the server. The Message Acknowledgement termianl outputs should show the JSON object with hte frame size and timestamp included.   Furthermore, make sure to update the file path in the Client_Implementation class in the Java client to the desired video to be processed.
 
 # Verification and Evidence
 
